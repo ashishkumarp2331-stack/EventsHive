@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>lpu event orginizers | Local Event Discovery Platform</title>
+  <meta name="description" content="lpu event orginizers - Discover and book local campus events.">
+  <meta name="keywords" content="lpu event orginizers, local events, event discovery, ticket booking">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <header class="site-header">
+    <div class="logo">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+        <line x1="16" y1="2" x2="16" y2="6"></line>
+        <line x1="8" y1="2" x2="8" y2="6"></line>
+        <line x1="3" y1="10" x2="21" y2="10"></line>
+      </svg>
+      <span>lpu event orginizers</span>
+    </div>
+
+    <nav id="main-nav" class="hidden" aria-label="Main Navigation">
+      <ul class="nav-links">
+        <li id="nav-dashboard-link" class="hidden"><a href="#dashboard-section">Dashboard & Reports</a></li>
+        <li id="nav-crud-link" class="hidden"><a href="#crud-section">Manage Events</a></li>
+        <li><a href="#discover-section">Discover Events</a></li>
+        <li><a href="#bookings-section">Bookings & Status</a></li>
+      </ul>
+    </nav>
+
+    <div class="user-session-bar">
+      <span id="current-user-badge" class="role-badge">Not Logged In</span>
+      <button type="button" id="logout-btn" class="btn-secondary hidden">Logout</button>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- AUTHENTICATION GATE -->
+    <section id="auth-section" class="auth-wrapper">
+
+      <div id="auth-box" class="auth-card">
+        <!-- LOGIN VIEW -->
+        <div id="login-view">
+          <h2>User Login</h2>
+          <p class="text-muted">Sign in with your email and password to continue.</p>
+          <form id="login-form" class="form-stack">
+            <div class="form-group">
+              <label for="login-email">Email Address *</label>
+              <input type="email" id="login-email" required placeholder="user@lpu.in">
+            </div>
+            <div class="form-group">
+              <label for="login-password">Password *</label>
+              <input type="password" id="login-password" required minlength="4" placeholder="Enter your password">
+            </div>
+            <button type="submit" class="btn-primary">Sign In</button>
+          </form>
+
+          <div class="auth-switch-footer">
+            <button type="button" id="show-signup-btn" class="link-btn">New user? Click here</button>
+          </div>
+        </div>
+
+        <!-- SIGN UP VIEW (Toggled from bottom of login with keyframe color animation) -->
+        <div id="signup-view" class="hidden">
+          <h2>Create New Account</h2>
+          <p class="text-muted">Register as an Attendee or Event Organizer.</p>
+          <form id="register-form" class="form-stack">
+            <div class="form-group">
+              <label for="reg-name">Full Name *</label>
+              <input type="text" id="reg-name" required minlength="3" placeholder="user">
+            </div>
+            <div class="form-group">
+              <label for="reg-email">Email Address *</label>
+              <input type="email" id="reg-email" required placeholder="user@lpu.in">
+            </div>
+            <div class="form-group">
+              <label for="reg-password">Password *</label>
+              <input type="password" id="reg-password" required minlength="4" placeholder="Minimum 4 characters">
+            </div>
+            <div class="form-group">
+              <label for="reg-role">Account Role *</label>
+              <select id="reg-role" required>
+                <option value="Attendee">Attendee / User (Discover & Book Events)</option>
+                <option value="Organizer">Organizer / Admin (Manage Events & Bookings)</option>
+              </select>
+            </div>
+            <button type="submit" class="btn-primary">Sign Up & Continue</button>
+          </form>
+
+          <div class="auth-switch-footer">
+            <button type="button" id="show-login-btn" class="link-btn">Already registered? Back to Login</button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- PROTECTED APPLICATION CONTENT -->
+    <div id="app-content" class="hidden">
+
+      <!-- ADMIN ONLY: DASHBOARD & BASIC REPORTS -->
+      <section id="dashboard-section" class="section-block hidden">
+        <div class="section-header">
+          <h2>Admin Dashboard & Analytics Reports</h2>
+          <p id="welcome-text" class="text-muted"></p>
+        </div>
+
+        <div class="kpi-grid">
+          <article class="kpi-card">
+            <h3>Total Events</h3>
+            <p id="stat-total-events" class="kpi-number">0</p>
+          </article>
+          <article class="kpi-card">
+            <h3>Total Requests</h3>
+            <p id="stat-total-bookings" class="kpi-number">0</p>
+          </article>
+          <article class="kpi-card">
+            <h3>Booked Tickets</h3>
+            <p id="stat-confirmed-bookings" class="kpi-number">0</p>
+          </article>
+          <article class="kpi-card">
+            <h3>Confirmed Revenue</h3>
+            <p id="stat-revenue" class="kpi-number">₹0</p>
+          </article>
+        </div>
+
+        <div class="card">
+          <h3>Category Summary Report</h3>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Events</th>
+                  <th>Total Capacity</th>
+                  <th>Tickets Booked</th>
+                  <th>Revenue</th>
+                </tr>
+              </thead>
+              <tbody id="report-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- SUPER ADMIN (admin@lpu.in) ONLY: ORGANIZER ACCOUNT APPROVALS -->
+        <div id="organizer-approval-card" class="card hidden" style="margin-top: 1.5rem;">
+          <h3>Pending Organizer / Admin Account Approvals (Super Admin Only)</h3>
+          <p class="text-muted">Only <code>admin@lpu.in</code> can approve or reject new Organizer registration requests.</p>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>User ID</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Requested Role</th>
+                  <th>Approval Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="organizer-approvals-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ADMIN ONLY: CRUD OPERATIONS FOR EVENTS -->
+      <section id="crud-section" class="section-block hidden">
+        <div class="card">
+          <h2 id="crud-form-title">Add New Event (Organizer / Admin Only)</h2>
+          <form id="event-crud-form" class="crud-form-grid">
+            <input type="hidden" id="edit-event-id">
+            <div class="form-group">
+              <label for="event-title">Event Title *</label>
+              <input type="text" id="event-title" required minlength="4" placeholder="e.g., Full-Stack Hackathon">
+            </div>
+            <div class="form-group">
+              <label for="event-category">Category *</label>
+              <select id="event-category" required>
+                <option value="Tech">Tech</option>
+                <option value="Music">Music</option>
+                <option value="Food">Food</option>
+                <option value="Art">Art</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="event-date">Event Date *</label>
+              <input type="date" id="event-date" required>
+            </div>
+            <div class="form-group">
+              <label for="event-location">Venue / Location *</label>
+              <input type="text" id="event-location" required minlength="3" placeholder="e.g., Shanti Devi Mittal Auditorium">
+            </div>
+            <div class="form-group">
+              <label for="event-price">Ticket Price (₹) *</label>
+              <input type="number" id="event-price" required min="0" max="10000" value="0">
+            </div>
+            <div class="form-group">
+              <label for="event-capacity">Total Seats *</label>
+              <input type="number" id="event-capacity" required min="1" max="500" value="50">
+            </div>
+            <div class="form-group form-group-full">
+              <label for="event-image">Thumbnail Image URL (16:9 YouTube-Style Preview)</label>
+              <input type="url" id="event-image" placeholder="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80">
+            </div>
+            <div class="form-group form-group-full">
+              <label for="event-description">Event Description & Full Details *</label>
+              <textarea id="event-description" rows="3" required minlength="10" placeholder="Enter complete event agenda, guest speakers, and guidelines..."></textarea>
+            </div>
+            <div class="crud-buttons">
+              <button type="submit" id="save-event-btn" class="btn-primary">Save Event</button>
+              <button type="button" id="cancel-edit-btn" class="btn-secondary hidden">Cancel Edit</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- DISCOVER, SEARCH & FILTER EVENTS -->
+      <section id="discover-section" class="section-block">
+        <div class="section-header">
+          <h2>Discover Local Events</h2>
+          <p class="text-muted">Click on any event card to expand its full description and booking details.</p>
+        </div>
+
+        <form id="filter-form" class="filter-bar" aria-label="Search and Filter Events">
+          <input type="search" id="search-input" placeholder="Search events by title, venue, or description...">
+          <select id="category-select" aria-label="Filter by Category">
+            <option value="All">All Categories</option>
+            <option value="Tech">Tech</option>
+            <option value="Music">Music</option>
+            <option value="Food">Food</option>
+            <option value="Art">Art</option>
+          </select>
+          <label class="checkbox-label">
+            <input type="checkbox" id="free-only"> Free Entry Only
+          </label>
+        </form>
+
+        <div id="events-grid" class="events-grid"></div>
+      </section>
+
+      <!-- BOOKINGS & STATUS TRACKING -->
+      <section id="bookings-section" class="section-block">
+        <div class="card">
+          <h2 id="bookings-heading">User Tab: My Tickets & Booking Status</h2>
+          <p id="bookings-subtext" class="text-muted">When your request is accepted by the Admin, your status shows "Ticket is Booked".</p>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Booking ID</th>
+                  <th>Event Title</th>
+                  <th>User</th>
+                  <th>Fee</th>
+                  <th>Ticket Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="bookings-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; 2026 lpu event orginizers. All rights reserved.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
