@@ -205,8 +205,12 @@
               <input type="number" id="event-capacity" required min="1" max="500" value="50">
             </div>
             <div class="form-group form-group-full">
-              <label for="event-image">Thumbnail Image URL (16:9 YouTube-Style Preview)</label>
-              <input type="url" id="event-image" placeholder="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80">
+              <label for="event-image">Thumbnail Image</label>
+              <div style="display: flex; gap: 0.75rem; align-items: center;">
+                <input type="text" id="event-image" placeholder="Paste image link or click Choose Image..." style="flex: 1;">
+                <input type="file" id="event-image-file" accept="image/*" class="hidden">
+                <button type="button" class="btn-secondary" onclick="document.getElementById('event-image-file').click()" style="white-space: nowrap;">Choose from Device</button>
+              </div>
             </div>
             <div class="form-group form-group-full">
               <label for="event-description">Event Description & Full Details *</label>

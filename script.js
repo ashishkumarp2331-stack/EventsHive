@@ -255,6 +255,28 @@ function renderOrganizerApprovals() {
 }
 
 // 3. ADMIN EVENT CRUD OPERATIONS
+let uploadedDeviceImage = "";
+
+document.getElementById("event-image-file").addEventListener("change", function (e) {
+  const file = e.target.files[0];
+  if (!file) {
+    uploadedDeviceImage = "";
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = function (event) {
+    uploadedDeviceImage = event.target.result;
+    document.getElementById("event-image").value = file.name;
+    showNotification(`Loaded "${file.name}" from device.`);
+  };
+  reader.readAsDataURL(file);
+});
+
+document.getElementById("event-image").addEventListener("input", function () {
+  uploadedDeviceImage = "";
+  document.getElementById("event-image-file").value = "";
+});
+
 document.getElementById("event-crud-form").addEventListener("submit", function (e) {
   e.preventDefault();
   if (!currentUser || currentUser.role !== "Organizer") return;
@@ -266,7 +288,8 @@ document.getElementById("event-crud-form").addEventListener("submit", function (
   const location = document.getElementById("event-location").value.trim();
   const price = Number(document.getElementById("event-price").value);
   const capacity = Number(document.getElementById("event-capacity").value);
-  const image = document.getElementById("event-image").value.trim() || DEFAULT_THUMBNAIL;
+  const imageInput = document.getElementById("event-image").value.trim();
+  const image = uploadedDeviceImage || imageInput || DEFAULT_THUMBNAIL;
   const description = document.getElementById("event-description").value.trim();
 
   if (editId) {
@@ -297,7 +320,12 @@ function startEditEvent(eventId) {
   document.getElementById("event-location").value = ev.location;
   document.getElementById("event-price").value = ev.price;
   document.getElementById("event-capacity").value = ev.capacity;
-  document.getElementById("event-image").value = ev.image || "";
+
+  const isDataUrl = (ev.image || "").startsWith("data:image");
+  document.getElementById("event-image").value = isDataUrl ? "Current uploaded device image" : (ev.image || "");
+  document.getElementById("event-image-file").value = "";
+  uploadedDeviceImage = isDataUrl ? ev.image : "";
+
   document.getElementById("event-description").value = ev.description || "";
 
   document.getElementById("crud-form-title").textContent = `Edit Event #${ev.id}: ${ev.title}`;
@@ -321,6 +349,7 @@ function deleteEvent(eventId) {
 function resetCrudForm() {
   document.getElementById("event-crud-form").reset();
   document.getElementById("edit-event-id").value = "";
+  uploadedDeviceImage = "";
   document.getElementById("crud-form-title").textContent = "Add New Event (Organizer / Admin Only)";
   document.getElementById("save-event-btn").textContent = "Save Event";
   document.getElementById("cancel-edit-btn").classList.add("hidden");
@@ -577,4 +606,4 @@ function refreshAllViews() {
 
 document.getElementById("search-input").addEventListener("input", renderEvents);
 document.getElementById("category-select").addEventListener("change", renderEvents);
-document.getElementById("free-only").addEventListener("change", renderEvents);s
+document.getElementById("free-only").addEventListener("change", renderEvents);
