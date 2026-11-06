@@ -237,7 +237,6 @@ code { background: #f0e9ff; color: var(--primary-hover); padding: 0.1rem 0.45rem
 .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
 .form-group label { font-size: 0.86rem; font-weight: 600; color: #3b2a68; }
 .form-group-full { grid-column: 1 / -1; }
-
 input[type="text"],
 input[type="email"],
 input[type="password"],
@@ -245,6 +244,7 @@ input[type="date"],
 input[type="number"],
 input[type="search"],
 input[type="url"],
+input[type="file"],
 select,
 textarea {
   padding: 0.7rem 1rem;
@@ -255,6 +255,19 @@ textarea {
   color: var(--text-main);
   background: rgba(255, 255, 255, 0.8);
   transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+input[type="file"]::file-selector-button {
+  margin-right: 0.85rem;
+  padding: 0.4rem 0.9rem;
+  border: none;
+  border-radius: 99px;
+  background: var(--grad-primary);
+  color: #fff;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 0.82rem;
+  cursor: pointer;
 }
 
 ::placeholder { color: #a09bb8; }
