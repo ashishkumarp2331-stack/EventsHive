@@ -1,7 +1,7 @@
 // Core Users & Role-Based Access Records
 const users = [
   { id: 1, name: "Studio Director", email: "admin@lpu.in", password: "1234", role: "Manager", status: "Approved" },
-  { id: 2, name: "Rohan Sharma (Guitarist)", email: "user@lpu.in", password: "1234", role: "Musician", status: "Approved" }
+  { id: 2, name: "Karan aujla (Guitarist)", email: "user@lpu.in", password: "1234", role: "Musician", status: "Approved" }
 ];
 
 let currentUser = null;
@@ -59,8 +59,8 @@ let eventsData = [
 
 // Centralized User Interactions & Workflow Status Records
 let bookingsData = [
-  { id: 5001, eventId: 102, attendeeEmail: "user@lpu.in", attendeeName: "Rohan Sharma (Guitarist)", status: "Booked" },
-  { id: 5002, eventId: 101, attendeeEmail: "user@lpu.in", attendeeName: "Rohan Sharma (Guitarist)", status: "Pending" }
+  { id: 5001, eventId: 102, attendeeEmail: "user@lpu.in", attendeeName: "Karan aujla (Guitarist)", status: "Booked" },
+  { id: 5002, eventId: 101, attendeeEmail: "user@lpu.in", attendeeName: "Karan aujla (Guitarist)", status: "Pending" }
 ];
 
 function showNotification(message) {
@@ -203,7 +203,7 @@ document.getElementById("logout-btn").addEventListener("click", function () {
   triggerAuthSwitchAnimation(false);
   document.getElementById("auth-section").classList.remove("hidden");
   document.getElementById("current-user-badge").textContent = "Not Logged In";
-  showNotification("Signed out of LPU Musicians Hub.");
+  showNotification("Signed out of GigSync.");
 });
 
 // SUPER ADMIN (admin@lpu.in) ROLE APPROVAL WORKFLOW
@@ -490,7 +490,7 @@ function renderEvents() {
               <p><strong>Technical Rider & Notes:</strong> ${ev.description}</p>
               <p><strong>Record ID:</strong> #${ev.id} | <strong>Session Type:</strong> ${ev.category}</p>
               <p><strong>Roster Status:</strong> ${bookedSeats} Confirmed • ${pendingRequests} In Review • ${seatsLeft} Open</p>
-              <p><strong>Managed By:</strong> LPU Musicians Hub Collective</p>
+              <p><strong>Managed By:</strong> GigSync Collective</p>
             </div>
           </div>
           <div class="card-actions">${actionButtons}</div>
