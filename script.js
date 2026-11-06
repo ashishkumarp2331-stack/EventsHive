@@ -1,64 +1,66 @@
-// Unit IV: Variables, Constants, Arrays, and Objects
+// Core Users & Role-Based Access Records
 const users = [
-  { id: 1, name: "user", email: "admin@lpu.in", password: "1234", role: "Organizer", status: "Approved" },
-  { id: 2, name: "user", email: "user@lpu.in", password: "1234", role: "Attendee", status: "Approved" }
+  { id: 1, name: "Studio Director", email: "admin@lpu.in", password: "1234", role: "Manager", status: "Approved" },
+  { id: 2, name: "Rohan Sharma (Guitarist)", email: "user@lpu.in", password: "1234", role: "Musician", status: "Approved" }
 ];
 
 let currentUser = null;
 let expandedEventIds = [];
 
-const DEFAULT_THUMBNAIL = "https://images.unsplash.com/photo-1511578314322-379afb476865?w=800&auto=format&fit=crop&q=80";
+const DEFAULT_THUMBNAIL = "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&auto=format&fit=crop&q=80";
 
+// Centralized Core Music Records (Gigs, Studio Sessions, Jams, Workshops)
 let eventsData = [
   {
     id: 101,
-    title: "Full-Stack Web Dev Summit",
-    category: "Tech",
+    title: "Acoustic Indie Rooftop Showcase",
+    category: "Live Gig",
     date: "2026-11-20",
-    location: "Main Seminar Hall",
+    location: "Open Air Amphitheater",
     price: 0,
-    capacity: 40,
-    image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80",
-    description: "Hands-on coding bootcamp covering HTML5 semantics, modern CSS Grid/Flexbox layouts, and JavaScript ES6 fundamentals. Bring your laptop for live project building."
+    capacity: 8,
+    image: "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=800&auto=format&fit=crop&q=80",
+    description: "Seeking acoustic guitarists, cajon percussionists, and indie vocalists for a 90-minute evening showcase. PA system, Shure SM58 mics, and DI boxes provided on stage."
   },
   {
     id: 102,
-    title: "Acoustic Indie Night",
-    category: "Music",
+    title: "Multi-Track Band Recording Session",
+    category: "Studio Session",
     date: "2026-11-22",
-    location: "Open Air Amphitheater",
-    price: 250,
-    capacity: 60,
-    image: "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=800&auto=format&fit=crop&q=80",
-    description: "An evening of live unplugged performances by campus bands and solo indie artists. Entry includes complimentary refreshments and backstage Q&A access."
+    location: "SoundLab Studio A",
+    price: 350,
+    capacity: 6,
+    image: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=800&auto=format&fit=crop&q=80",
+    description: "Full analog-digital hybrid tracking session for local original compositions. Includes sound engineer, isolated drum booth, and basic stem mixing."
   },
   {
     id: 103,
-    title: "Artisan Street Food Fest",
-    category: "Food",
+    title: "Friday Night Funk & Jazz Fusion Jam",
+    category: "Jam & Rehearsal",
     date: "2026-11-25",
-    location: "Campus Quadrangle",
-    price: 150,
-    capacity: 100,
-    image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&auto=format&fit=crop&q=80",
-    description: "Explore over 20 regional culinary stalls, live chef demonstrations, and tasting sessions curated by local food artisans."
+    location: "Rehearsal Room 204",
+    price: 0,
+    capacity: 15,
+    image: "https://images.unsplash.com/photo-1511192336575-5a79af67a629?w=800&auto=format&fit=crop&q=80",
+    description: "Collaborative improvisation workflow for brass players, bassists, keys, and drummers. Standard real-book lead sheets and 5-piece drum kit available."
   },
   {
     id: 104,
-    title: "Digital Illustration Workshop",
-    category: "Art",
+    title: "Live Sound Mixing & Pedalboard Clinic",
+    category: "Music Workshop",
     date: "2026-11-28",
-    location: "Design Studio B",
-    price: 0,
+    location: "Audio Production Lab",
+    price: 150,
     capacity: 25,
-    image: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=800&auto=format&fit=crop&q=80",
-    description: "Beginner-friendly workshop on vector graphics, SVG artwork, color theory, and digital character design led by industry illustrators."
+    image: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&auto=format&fit=crop&q=80",
+    description: "Hands-on clinic for local musicians covering gain staging, stage monitor routing, EQ sculpting, and eliminating ground-loop hum on live pedalboards."
   }
 ];
 
+// Centralized User Interactions & Workflow Status Records
 let bookingsData = [
-  { id: 5001, eventId: 102, attendeeEmail: "user@lpu.in", attendeeName: "user", status: "Booked" },
-  { id: 5002, eventId: 101, attendeeEmail: "user@lpu.in", attendeeName: "user", status: "Pending" }
+  { id: 5001, eventId: 102, attendeeEmail: "user@lpu.in", attendeeName: "Rohan Sharma (Guitarist)", status: "Booked" },
+  { id: 5002, eventId: 101, attendeeEmail: "user@lpu.in", attendeeName: "Rohan Sharma (Guitarist)", status: "Pending" }
 ];
 
 function showNotification(message) {
@@ -77,7 +79,7 @@ const signupView = document.getElementById("signup-view");
 
 function triggerAuthSwitchAnimation(showSignup) {
   authBox.classList.remove("animate-auth-switch");
-  void authBox.offsetWidth; // Force reflow so keyframe animation replays cleanly
+  void authBox.offsetWidth;
   authBox.classList.add("animate-auth-switch");
 
   if (showSignup) {
@@ -105,11 +107,11 @@ document.getElementById("login-form").addEventListener("submit", function (e) {
   }
 
   if (foundUser.status === "Pending") {
-    showNotification("Your Organizer account is pending approval from admin@lpu.in.");
+    showNotification("Your Band Leader / Manager account is pending approval from admin@lpu.in.");
     return;
   }
   if (foundUser.status === "Rejected") {
-    showNotification("Your Organizer account request was rejected by admin@lpu.in.");
+    showNotification("Your Band Leader / Manager request was rejected by admin@lpu.in.");
     return;
   }
 
@@ -125,33 +127,33 @@ document.getElementById("register-form").addEventListener("submit", function (e)
   const role = document.getElementById("reg-role").value;
 
   if (users.some(u => u.email === email)) {
-    showNotification("An account with this email already exists.");
+    showNotification("A musician record with this email already exists.");
     return;
   }
 
-  const accountStatus = role === "Organizer" ? "Pending" : "Approved";
+  const accountStatus = role === "Manager" ? "Pending" : "Approved";
   const newUser = { id: users.length + 1, name, email, password, role, status: accountStatus };
   users.push(newUser);
   this.reset();
 
-  if (role === "Organizer") {
+  if (role === "Manager") {
     triggerAuthSwitchAnimation(false);
-    showNotification("Organizer request sent! You can log in once admin@lpu.in approves your account.");
+    showNotification("Band Leader / Manager request submitted! Log in once admin@lpu.in approves your role.");
   } else {
     setSession(newUser);
-    showNotification(`Account registered as ${name} (${role}).`);
+    showNotification(`Musician profile registered as ${name}.`);
   }
 });
 
 function setSession(user) {
   currentUser = user;
-  const isOrganizer = user.role === "Organizer" && user.status === "Approved";
+  const isManager = user.role === "Manager" && user.status === "Approved";
   const isSuperAdmin = user.email.toLowerCase() === "admin@lpu.in";
   const roleLabel = isSuperAdmin
-    ? "Super Admin"
-    : isOrganizer
-    ? "Organizer / Admin"
-    : "Attendee / User";
+    ? "Super Admin / Studio Director"
+    : isManager
+    ? "Band Leader / Manager"
+    : "Local Musician";
 
   document.getElementById("auth-section").classList.add("hidden");
   document.getElementById("app-content").classList.remove("hidden");
@@ -159,25 +161,25 @@ function setSession(user) {
   document.getElementById("logout-btn").classList.remove("hidden");
   document.getElementById("current-user-badge").textContent = `${user.name} (${roleLabel})`;
 
-  document.getElementById("dashboard-section").classList.toggle("hidden", !isOrganizer);
-  document.getElementById("nav-dashboard-link").classList.toggle("hidden", !isOrganizer);
-  document.getElementById("crud-section").classList.toggle("hidden", !isOrganizer);
-  document.getElementById("nav-crud-link").classList.toggle("hidden", !isOrganizer);
+  document.getElementById("dashboard-section").classList.toggle("hidden", !isManager);
+  document.getElementById("nav-dashboard-link").classList.toggle("hidden", !isManager);
+  document.getElementById("crud-section").classList.toggle("hidden", !isManager);
+  document.getElementById("nav-crud-link").classList.toggle("hidden", !isManager);
 
-  // Only admin@lpu.in sees the Organizer Account Approval Card
+  // Only admin@lpu.in sees the Band Leader / Studio Manager Approval Card
   document.getElementById("organizer-approval-card").classList.toggle("hidden", !isSuperAdmin);
 
-  if (isOrganizer) {
-    document.getElementById("welcome-text").textContent = `Signed in as ${user.name} (${roleLabel})`;
+  if (isManager) {
+    document.getElementById("welcome-text").textContent = `Signed in as ${user.name} (${roleLabel}) — Monitoring centralized records, lineup workflows, and status metrics.`;
   }
 
-  document.getElementById("bookings-heading").textContent = isOrganizer
-    ? "Admin / Organizer Tab: Manage Booking Requests"
-    : "User Tab: My Tickets & Booking Status";
+  document.getElementById("bookings-heading").textContent = isManager
+    ? "Manager Workflow Tab: Review Musician Lineup & Slot Requests"
+    : "Musician Workflow Tab: My Lineup Applications & Slot Status";
 
-  document.getElementById("bookings-subtext").textContent = isOrganizer
-    ? "Review and accept or reject incoming attendee booking requests."
-    : "Track your requested tickets. Accepted requests display 'Ticket is Booked'.";
+  document.getElementById("bookings-subtext").textContent = isManager
+    ? "Approve or reject incoming musician slot requests to update live lineup statuses."
+    : "Track your submitted gig and studio slot requests in real time.";
 
   showNotification(`Signed in as ${user.name} (${roleLabel}).`);
   refreshAllViews();
@@ -201,13 +203,13 @@ document.getElementById("logout-btn").addEventListener("click", function () {
   triggerAuthSwitchAnimation(false);
   document.getElementById("auth-section").classList.remove("hidden");
   document.getElementById("current-user-badge").textContent = "Not Logged In";
-  showNotification("Signed out successfully.");
+  showNotification("Signed out of LPU Musicians Hub.");
 });
 
-// SUPER ADMIN (admin@lpu.in) ORGANIZER APPROVAL WORKFLOW
+// SUPER ADMIN (admin@lpu.in) ROLE APPROVAL WORKFLOW
 function updateOrganizerApproval(userId, newStatus) {
   if (!currentUser || currentUser.email.toLowerCase() !== "admin@lpu.in") {
-    showNotification("Access Denied: Only admin@lpu.in can approve Organizers.");
+    showNotification("Access Denied: Only admin@lpu.in can approve Band Leaders / Managers.");
     return;
   }
 
@@ -215,7 +217,7 @@ function updateOrganizerApproval(userId, newStatus) {
   if (!targetUser) return;
 
   targetUser.status = newStatus;
-  showNotification(`Organizer account (${targetUser.email}) status set to ${newStatus}.`);
+  showNotification(`Manager role request (${targetUser.email}) updated to ${newStatus}.`);
   renderOrganizerApprovals();
 }
 
@@ -225,16 +227,16 @@ function renderOrganizerApprovals() {
   const tbody = document.getElementById("organizer-approvals-body");
   tbody.innerHTML = "";
 
-  const organizerRequests = users.filter(
-    u => u.role === "Organizer" && u.email.toLowerCase() !== "admin@lpu.in"
+  const managerRequests = users.filter(
+    u => u.role === "Manager" && u.email.toLowerCase() !== "admin@lpu.in"
   );
 
-  if (organizerRequests.length === 0) {
-    tbody.innerHTML = "<tr><td colspan='6'>No new Organizer registration requests.</td></tr>";
+  if (managerRequests.length === 0) {
+    tbody.innerHTML = "<tr><td colspan='6'>No pending Band Leader / Studio Manager role requests.</td></tr>";
     return;
   }
 
-  organizerRequests.forEach(u => {
+  managerRequests.forEach(u => {
     const badgeClass = u.status === "Approved" ? "Confirmed" : u.status;
     const actions = u.status === "Pending"
       ? `<button class="btn-success" onclick="updateOrganizerApproval(${u.id}, 'Approved')">Approve</button>
@@ -246,7 +248,7 @@ function renderOrganizerApprovals() {
       <td>#${u.id}</td>
       <td>${u.name}</td>
       <td>${u.email}</td>
-      <td>${u.role}</td>
+      <td>Band Leader / Manager</td>
       <td><span class="badge status-${badgeClass}">${u.status}</span></td>
       <td>${actions}</td>
     `;
@@ -254,7 +256,7 @@ function renderOrganizerApprovals() {
   });
 }
 
-// 3. ADMIN EVENT CRUD OPERATIONS
+// 3. CENTRALIZED CORE RECORDS CRUD OPERATIONS
 let uploadedDeviceImage = "";
 
 document.getElementById("event-image-file").addEventListener("change", function (e) {
@@ -267,7 +269,7 @@ document.getElementById("event-image-file").addEventListener("change", function 
   reader.onload = function (event) {
     uploadedDeviceImage = event.target.result;
     document.getElementById("event-image").value = file.name;
-    showNotification(`Loaded "${file.name}" from device.`);
+    showNotification(`Loaded cover image "${file.name}" from device.`);
   };
   reader.readAsDataURL(file);
 });
@@ -279,7 +281,7 @@ document.getElementById("event-image").addEventListener("input", function () {
 
 document.getElementById("event-crud-form").addEventListener("submit", function (e) {
   e.preventDefault();
-  if (!currentUser || currentUser.role !== "Organizer") return;
+  if (!currentUser || currentUser.role !== "Manager") return;
 
   const editId = document.getElementById("edit-event-id").value;
   const title = document.getElementById("event-title").value.trim();
@@ -296,12 +298,12 @@ document.getElementById("event-crud-form").addEventListener("submit", function (
     const idx = eventsData.findIndex(ev => ev.id === Number(editId));
     if (idx !== -1) {
       eventsData[idx] = { id: Number(editId), title, category, date, location, price, capacity, image, description };
-      showNotification(`Updated event "${title}".`);
+      showNotification(`Updated core music record "${title}".`);
     }
   } else {
     const newId = eventsData.length > 0 ? Math.max(...eventsData.map(ev => ev.id)) + 1 : 101;
     eventsData.push({ id: newId, title, category, date, location, price, capacity, image, description });
-    showNotification(`Created event "${title}".`);
+    showNotification(`Published new music record "${title}".`);
   }
 
   resetCrudForm();
@@ -309,7 +311,7 @@ document.getElementById("event-crud-form").addEventListener("submit", function (
 });
 
 function startEditEvent(eventId) {
-  if (!currentUser || currentUser.role !== "Organizer") return;
+  if (!currentUser || currentUser.role !== "Manager") return;
   const ev = eventsData.find(item => item.id === eventId);
   if (!ev) return;
 
@@ -328,21 +330,21 @@ function startEditEvent(eventId) {
 
   document.getElementById("event-description").value = ev.description || "";
 
-  document.getElementById("crud-form-title").textContent = `Edit Event #${ev.id}: ${ev.title}`;
-  document.getElementById("save-event-btn").textContent = "Update Event";
+  document.getElementById("crud-form-title").textContent = `Edit Music Record #${ev.id}: ${ev.title}`;
+  document.getElementById("save-event-btn").textContent = "Update Record";
   document.getElementById("cancel-edit-btn").classList.remove("hidden");
   document.getElementById("crud-section").scrollIntoView({ behavior: "smooth" });
 }
 
 function deleteEvent(eventId) {
-  if (!currentUser || currentUser.role !== "Organizer") return;
+  if (!currentUser || currentUser.role !== "Manager") return;
   const ev = eventsData.find(item => item.id === eventId);
   if (!ev) return;
 
   eventsData = eventsData.filter(item => item.id !== eventId);
   bookingsData = bookingsData.filter(b => b.eventId !== eventId);
   expandedEventIds = expandedEventIds.filter(id => id !== eventId);
-  showNotification(`Removed event "${ev.title}".`);
+  showNotification(`Deleted music record "${ev.title}".`);
   refreshAllViews();
 }
 
@@ -350,8 +352,8 @@ function resetCrudForm() {
   document.getElementById("event-crud-form").reset();
   document.getElementById("edit-event-id").value = "";
   uploadedDeviceImage = "";
-  document.getElementById("crud-form-title").textContent = "Add New Event (Organizer / Admin Only)";
-  document.getElementById("save-event-btn").textContent = "Save Event";
+  document.getElementById("crud-form-title").textContent = "Centralized Core Records: Add Gig / Session (Manager Only)";
+  document.getElementById("save-event-btn").textContent = "Save Record";
   document.getElementById("cancel-edit-btn").classList.add("hidden");
 }
 
@@ -366,14 +368,14 @@ function toggleExpandEvent(eventId) {
   renderEvents();
 }
 
-// 4. BOOKING WORKFLOW
+// 4. MUSICIAN SLOT APPLICATION & APPROVAL WORKFLOW
 function requestBooking(eventId) {
   if (!currentUser) return;
   const ev = eventsData.find(item => item.id === eventId);
   const bookedCount = bookingsData.filter(b => b.eventId === eventId && b.status === "Booked").length;
 
   if (bookedCount >= ev.capacity) {
-    showNotification("This event has reached full capacity.");
+    showNotification("All musician roster slots for this session are full.");
     return;
   }
 
@@ -381,7 +383,7 @@ function requestBooking(eventId) {
     b => b.eventId === eventId && b.attendeeEmail === currentUser.email && b.status !== "Cancelled"
   );
   if (duplicate) {
-    showNotification(`You already have a request for "${ev.title}".`);
+    showNotification(`You already have an active slot application for "${ev.title}".`);
     return;
   }
 
@@ -394,7 +396,7 @@ function requestBooking(eventId) {
   };
 
   bookingsData.push(newBooking);
-  showNotification(`Ticket request #${newBooking.id} submitted for Admin approval.`);
+  showNotification(`Slot application #${newBooking.id} submitted for Manager review.`);
   refreshAllViews();
 }
 
@@ -402,20 +404,20 @@ function updateBookingStatus(bookingId, newStatus) {
   const booking = bookingsData.find(b => b.id === bookingId);
   if (!booking) return;
 
-  if ((newStatus === "Booked" || newStatus === "Rejected") && (!currentUser || currentUser.role !== "Organizer")) {
+  if ((newStatus === "Booked" || newStatus === "Rejected") && (!currentUser || currentUser.role !== "Manager")) {
     return;
   }
 
   booking.status = newStatus;
   showNotification(
     newStatus === "Booked"
-      ? `Request #${booking.id} accepted! Status is now "Ticket is Booked".`
-      : `Request #${booking.id} updated to ${newStatus}.`
+      ? `Application #${booking.id} approved! Status is now "Slot Confirmed".`
+      : `Application #${booking.id} status updated to ${newStatus}.`
   );
   refreshAllViews();
 }
 
-// 5. RENDERING VIEWS
+// 5. RENDERING VIEWS & STATUS REPORTS
 function renderEvents() {
   if (!currentUser) return;
 
@@ -436,7 +438,7 @@ function renderEvents() {
   });
 
   if (filtered.length === 0) {
-    grid.innerHTML = "<p class='text-muted'>No matching events found.</p>";
+    grid.innerHTML = "<p class='text-muted'>No matching gigs or studio sessions found.</p>";
     return;
   }
 
@@ -444,13 +446,13 @@ function renderEvents() {
     const bookedSeats = bookingsData.filter(b => b.eventId === ev.id && b.status === "Booked").length;
     const pendingRequests = bookingsData.filter(b => b.eventId === ev.id && b.status === "Pending").length;
     const seatsLeft = Math.max(0, ev.capacity - bookedSeats);
-    const priceLabel = ev.price === 0 ? "FREE" : `₹${ev.price}`;
+    const priceLabel = ev.price === 0 ? "OPEN / FREE" : `₹${ev.price}`;
     const isExpanded = expandedEventIds.includes(ev.id);
 
     let actionButtons = "";
-    if (currentUser.role === "Organizer") {
+    if (currentUser.role === "Manager") {
       actionButtons = `
-        <button class="btn-outline" onclick="event.stopPropagation(); startEditEvent(${ev.id})">Edit</button>
+        <button class="btn-outline" onclick="event.stopPropagation(); startEditEvent(${ev.id})">Edit Record</button>
         <button class="btn-danger" onclick="event.stopPropagation(); deleteEvent(${ev.id})">Remove</button>
       `;
     } else {
@@ -458,11 +460,11 @@ function renderEvents() {
         b => b.eventId === ev.id && b.attendeeEmail === currentUser.email && b.status !== "Cancelled"
       );
       if (userBooking && userBooking.status === "Booked") {
-        actionButtons = `<span class="badge status-Confirmed">Ticket is Booked</span>`;
+        actionButtons = `<span class="badge status-Confirmed">Slot Confirmed</span>`;
       } else if (userBooking && userBooking.status === "Pending") {
-        actionButtons = `<span class="badge status-Pending">Pending Approval</span>`;
+        actionButtons = `<span class="badge status-Pending">Pending Review</span>`;
       } else {
-        actionButtons = `<button class="btn-primary" onclick="event.stopPropagation(); requestBooking(${ev.id})">Request Ticket</button>`;
+        actionButtons = `<button class="btn-primary" onclick="event.stopPropagation(); requestBooking(${ev.id})">Apply for Slot</button>`;
       }
     }
 
@@ -480,15 +482,15 @@ function renderEvents() {
         <div class="card-body">
           <div>
             <h3 class="card-title">${ev.title}</h3>
-            <p class="card-meta"><strong>Date:</strong> ${ev.date} • <strong>Venue:</strong> ${ev.location}</p>
-            <p class="card-meta"><strong>Seats Available:</strong> ${seatsLeft} of ${ev.capacity}</p>
-            <p class="expand-hint">${isExpanded ? "▲ Hide event details" : "▼ Click to view full description & details"}</p>
+            <p class="card-meta"><strong>Date:</strong> ${ev.date} • <strong>Studio / Stage:</strong> ${ev.location}</p>
+            <p class="card-meta"><strong>Open Roster Slots:</strong> ${seatsLeft} of ${ev.capacity} musicians</p>
+            <p class="expand-hint">${isExpanded ? "▲ Hide technical rider & status" : "▼ View technical rider, gear & roster status"}</p>
 
             <div class="event-details-panel ${isExpanded ? "" : "hidden"}">
-              <p><strong>Description:</strong> ${ev.description}</p>
-              <p><strong>Event ID:</strong> #${ev.id} | <strong>Category:</strong> ${ev.category}</p>
-              <p><strong>Capacity Status:</strong> ${bookedSeats} Booked • ${pendingRequests} Pending • ${seatsLeft} Left</p>
-              <p><strong>Organizer:</strong> lpu event orginizers</p>
+              <p><strong>Technical Rider & Notes:</strong> ${ev.description}</p>
+              <p><strong>Record ID:</strong> #${ev.id} | <strong>Session Type:</strong> ${ev.category}</p>
+              <p><strong>Roster Status:</strong> ${bookedSeats} Confirmed • ${pendingRequests} In Review • ${seatsLeft} Open</p>
+              <p><strong>Managed By:</strong> LPU Musicians Hub Collective</p>
             </div>
           </div>
           <div class="card-actions">${actionButtons}</div>
@@ -505,35 +507,35 @@ function renderBookingsTable() {
   const tbody = document.getElementById("bookings-table-body");
   tbody.innerHTML = "";
 
-  const visibleBookings = currentUser.role === "Attendee"
+  const visibleBookings = currentUser.role === "Musician"
     ? bookingsData.filter(b => b.attendeeEmail === currentUser.email)
     : bookingsData;
 
   if (visibleBookings.length === 0) {
-    tbody.innerHTML = "<tr><td colspan='6'>No booking records found.</td></tr>";
+    tbody.innerHTML = "<tr><td colspan='6'>No musician workflow records found.</td></tr>";
     return;
   }
 
   visibleBookings.forEach(b => {
-    const ev = eventsData.find(item => item.id === b.eventId) || { title: "Removed Event", price: 0 };
+    const ev = eventsData.find(item => item.id === b.eventId) || { title: "Archived Session", price: 0 };
 
     const statusBadge = b.status === "Booked"
-      ? `<span class="badge status-Confirmed">Ticket is Booked</span>`
+      ? `<span class="badge status-Confirmed">Slot Confirmed</span>`
       : b.status === "Pending"
-      ? `<span class="badge status-Pending">Pending Approval</span>`
+      ? `<span class="badge status-Pending">Pending Review</span>`
       : `<span class="badge status-${b.status}">${b.status}</span>`;
 
     let actions = "";
-    if (currentUser.role === "Organizer") {
+    if (currentUser.role === "Manager") {
       actions = b.status === "Pending"
-        ? `<button class="btn-success" onclick="updateBookingStatus(${b.id}, 'Booked')">Accept</button>
-           <button class="btn-danger" onclick="updateBookingStatus(${b.id}, 'Rejected')">Reject</button>`
-        : `<span class="text-muted">${b.status === "Booked" ? "Ticket is Booked" : b.status}</span>`;
+        ? `<button class="btn-success" onclick="updateBookingStatus(${b.id}, 'Booked')">Approve Slot</button>
+           <button class="btn-danger" onclick="updateBookingStatus(${b.id}, 'Rejected')">Decline</button>`
+        : `<span class="text-muted">${b.status === "Booked" ? "Slot Confirmed" : b.status}</span>`;
     } else {
       actions = b.status === "Booked"
-        ? `<strong style="color: var(--success);">✓ Ticket is Booked</strong>`
+        ? `<strong style="color: var(--success);">✓ Slot Confirmed</strong>`
         : b.status === "Pending"
-        ? `<button class="btn-secondary" onclick="updateBookingStatus(${b.id}, 'Cancelled')">Cancel</button>`
+        ? `<button class="btn-secondary" onclick="updateBookingStatus(${b.id}, 'Cancelled')">Withdraw</button>`
         : `<span class="text-muted">Closed</span>`;
     }
 
@@ -551,7 +553,7 @@ function renderBookingsTable() {
 }
 
 function renderDashboardAndReports() {
-  if (!currentUser || currentUser.role !== "Organizer") return;
+  if (!currentUser || currentUser.role !== "Manager") return;
 
   const bookedList = bookingsData.filter(b => b.status === "Booked");
   const totalRevenue = bookedList.reduce((sum, b) => {
@@ -564,7 +566,7 @@ function renderDashboardAndReports() {
   document.getElementById("stat-confirmed-bookings").textContent = bookedList.length;
   document.getElementById("stat-revenue").textContent = `₹${totalRevenue}`;
 
-  const categories = ["Tech", "Music", "Food", "Art"];
+  const categories = ["Live Gig", "Studio Session", "Jam & Rehearsal", "Music Workshop"];
   const reportBody = document.getElementById("report-table-body");
   reportBody.innerHTML = "";
 
@@ -584,7 +586,7 @@ function renderDashboardAndReports() {
     row.innerHTML = `
       <td><strong>${cat}</strong></td>
       <td>${catEvents.length}</td>
-      <td>${catCapacity} seats</td>
+      <td>${catCapacity} slots</td>
       <td>${catBooked.length}</td>
       <td>₹${catRevenue}</td>
     `;
@@ -594,7 +596,7 @@ function renderDashboardAndReports() {
 
 function refreshAllViews() {
   if (!currentUser) return;
-  if (currentUser.role === "Organizer") {
+  if (currentUser.role === "Manager") {
     renderDashboardAndReports();
     if (currentUser.email.toLowerCase() === "admin@lpu.in") {
       renderOrganizerApprovals();

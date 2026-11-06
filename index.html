@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>lpu event orginizers | Local Event Discovery Platform</title>
-  <meta name="description" content="lpu event orginizers - Discover and book local campus events.">
-  <meta name="keywords" content="lpu event orginizers, local events, event discovery, ticket booking">
+  <title>LPU Musicians Hub | Role-Based Platform for Local Musicians</title>
+  <meta name="description" content="Role-based online platform for local musicians centralizing core records, user interactions, workflows, and status reporting.">
+  <meta name="keywords" content="local musicians, gig management, studio sessions, role-based platform, status reporting">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -15,20 +15,19 @@
   <header class="site-header">
     <div class="logo">
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-        <line x1="16" y1="2" x2="16" y2="6"></line>
-        <line x1="8" y1="2" x2="8" y2="6"></line>
-        <line x1="3" y1="10" x2="21" y2="10"></line>
+        <path d="M9 18V5l12-2v13"></path>
+        <circle cx="6" cy="18" r="3"></circle>
+        <circle cx="18" cy="16" r="3"></circle>
       </svg>
-      <span>lpu event orginizers</span>
+      <span>LPU Musicians Hub</span>
     </div>
 
     <nav id="main-nav" class="hidden" aria-label="Main Navigation">
       <ul class="nav-links">
-        <li id="nav-dashboard-link" class="hidden"><a href="#dashboard-section">Dashboard & Reports</a></li>
-        <li id="nav-crud-link" class="hidden"><a href="#crud-section">Manage Events</a></li>
-        <li><a href="#discover-section">Discover Events</a></li>
-        <li><a href="#bookings-section">Bookings & Status</a></li>
+        <li id="nav-dashboard-link" class="hidden"><a href="#dashboard-section">Status Reports</a></li>
+        <li id="nav-crud-link" class="hidden"><a href="#crud-section">Core Music Records</a></li>
+        <li><a href="#discover-section">Gigs & Sessions</a></li>
+        <li><a href="#bookings-section">Workflows & Status</a></li>
       </ul>
     </nav>
 
@@ -46,50 +45,50 @@
       <div id="auth-box" class="auth-card">
         <!-- LOGIN VIEW -->
         <div id="login-view">
-          <h2>User Login</h2>
-          <p class="text-muted">Sign in with your email and password to continue.</p>
+          <h2>Musician Portal Login</h2>
+          <p class="text-muted">Sign in to access centralized music records, workflows, and status reports.</p>
           <form id="login-form" class="form-stack">
             <div class="form-group">
               <label for="login-email">Email Address *</label>
-              <input type="email" id="login-email" required placeholder="user@lpu.in">
+              <input type="email" id="login-email" required placeholder="user@lpu.in or admin@lpu.in">
             </div>
             <div class="form-group">
               <label for="login-password">Password *</label>
-              <input type="password" id="login-password" required minlength="4" placeholder="Enter your password">
+              <input type="password" id="login-password" required minlength="4" placeholder="Enter your password (1234)">
             </div>
             <button type="submit" class="btn-primary">Sign In</button>
           </form>
 
           <div class="auth-switch-footer">
-            <button type="button" id="show-signup-btn" class="link-btn">New user? Click here</button>
+            <button type="button" id="show-signup-btn" class="link-btn">New musician or band leader? Register here</button>
           </div>
         </div>
 
-        <!-- SIGN UP VIEW (Toggled from bottom of login with keyframe color animation) -->
+        <!-- SIGN UP VIEW -->
         <div id="signup-view" class="hidden">
-          <h2>Create New Account</h2>
-          <p class="text-muted">Register as an Attendee or Event Organizer.</p>
+          <h2>Register Musician Account</h2>
+          <p class="text-muted">Join as a Performing Artist or a Band Leader / Studio Manager.</p>
           <form id="register-form" class="form-stack">
             <div class="form-group">
-              <label for="reg-name">Full Name *</label>
-              <input type="text" id="reg-name" required minlength="3" placeholder="user">
+              <label for="reg-name">Stage / Full Name *</label>
+              <input type="text" id="reg-name" required minlength="3" placeholder="e.g., Arjun Mehta (Lead Guitar)">
             </div>
             <div class="form-group">
               <label for="reg-email">Email Address *</label>
-              <input type="email" id="reg-email" required placeholder="user@lpu.in">
+              <input type="email" id="reg-email" required placeholder="musician@lpu.in">
             </div>
             <div class="form-group">
               <label for="reg-password">Password *</label>
               <input type="password" id="reg-password" required minlength="4" placeholder="Minimum 4 characters">
             </div>
             <div class="form-group">
-              <label for="reg-role">Account Role *</label>
+              <label for="reg-role">Platform Role *</label>
               <select id="reg-role" required>
-                <option value="Attendee">Attendee / User (Discover & Book Events)</option>
-                <option value="Organizer">Organizer / Admin (Manage Events & Bookings)</option>
+                <option value="Musician">Musician / Artist (Apply for Gigs, Jams & Studio Slots)</option>
+                <option value="Manager">Band Leader / Studio Manager (Manage Records & Workflows)</option>
               </select>
             </div>
-            <button type="submit" class="btn-primary">Sign Up & Continue</button>
+            <button type="submit" class="btn-primary">Register & Continue</button>
           </form>
 
           <div class="auth-switch-footer">
@@ -103,43 +102,43 @@
     <!-- PROTECTED APPLICATION CONTENT -->
     <div id="app-content" class="hidden">
 
-      <!-- ADMIN ONLY: DASHBOARD & BASIC REPORTS -->
+      <!-- MANAGER / ADMIN ONLY: STATUS REPORTING & ANALYTICS -->
       <section id="dashboard-section" class="section-block hidden">
         <div class="section-header">
-          <h2>Admin Dashboard & Analytics Reports</h2>
+          <h2>Centralized Status Reporting & Analytics</h2>
           <p id="welcome-text" class="text-muted"></p>
         </div>
 
         <div class="kpi-grid">
           <article class="kpi-card">
-            <h3>Total Events</h3>
+            <h3>Active Music Records</h3>
             <p id="stat-total-events" class="kpi-number">0</p>
           </article>
           <article class="kpi-card">
-            <h3>Total Requests</h3>
+            <h3>Musician Applications</h3>
             <p id="stat-total-bookings" class="kpi-number">0</p>
           </article>
           <article class="kpi-card">
-            <h3>Booked Tickets</h3>
+            <h3>Confirmed Lineup Slots</h3>
             <p id="stat-confirmed-bookings" class="kpi-number">0</p>
           </article>
           <article class="kpi-card">
-            <h3>Confirmed Revenue</h3>
+            <h3>Session / Booking Fees</h3>
             <p id="stat-revenue" class="kpi-number">₹0</p>
           </article>
         </div>
 
         <div class="card">
-          <h3>Category Summary Report</h3>
+          <h3>Genre & Session Status Report</h3>
           <div class="table-wrapper">
             <table>
               <thead>
                 <tr>
-                  <th>Category</th>
-                  <th>Events</th>
-                  <th>Total Capacity</th>
-                  <th>Tickets Booked</th>
-                  <th>Revenue</th>
+                  <th>Music Category</th>
+                  <th>Active Records</th>
+                  <th>Total Roster Slots</th>
+                  <th>Confirmed Musicians</th>
+                  <th>Total Session Fees</th>
                 </tr>
               </thead>
               <tbody id="report-table-body"></tbody>
@@ -147,19 +146,19 @@
           </div>
         </div>
 
-        <!-- SUPER ADMIN (admin@lpu.in) ONLY: ORGANIZER ACCOUNT APPROVALS -->
+        <!-- SUPER ADMIN (admin@lpu.in) ONLY: BAND LEADER / STUDIO MANAGER APPROVALS -->
         <div id="organizer-approval-card" class="card hidden" style="margin-top: 1.5rem;">
-          <h3>Pending Organizer / Admin Account Approvals (Super Admin Only)</h3>
-          <p class="text-muted">Only <code>admin@lpu.in</code> can approve or reject new Organizer registration requests.</p>
+          <h3>Role Workflow: Pending Band Leader / Manager Approvals (Super Admin Only)</h3>
+          <p class="text-muted">Only <code>admin@lpu.in</code> can approve or reject new Band Leader / Studio Manager requests.</p>
           <div class="table-wrapper">
             <table>
               <thead>
                 <tr>
-                  <th>User ID</th>
+                  <th>Record ID</th>
                   <th>Name</th>
                   <th>Email</th>
                   <th>Requested Role</th>
-                  <th>Approval Status</th>
+                  <th>Workflow Status</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -169,99 +168,99 @@
         </div>
       </section>
 
-      <!-- ADMIN ONLY: CRUD OPERATIONS FOR EVENTS -->
+      <!-- MANAGER / ADMIN ONLY: CORE RECORDS CRUD OPERATIONS -->
       <section id="crud-section" class="section-block hidden">
         <div class="card">
-          <h2 id="crud-form-title">Add New Event (Organizer / Admin Only)</h2>
+          <h2 id="crud-form-title">Centralized Core Records: Add Gig / Session (Manager Only)</h2>
           <form id="event-crud-form" class="crud-form-grid">
             <input type="hidden" id="edit-event-id">
             <div class="form-group">
-              <label for="event-title">Event Title *</label>
-              <input type="text" id="event-title" required minlength="4" placeholder="e.g., Full-Stack Hackathon">
+              <label for="event-title">Gig / Session Title *</label>
+              <input type="text" id="event-title" required minlength="4" placeholder="e.g., Acoustic Indie Showcase">
             </div>
             <div class="form-group">
-              <label for="event-category">Category *</label>
+              <label for="event-category">Session Category *</label>
               <select id="event-category" required>
-                <option value="Tech">Tech</option>
-                <option value="Music">Music</option>
-                <option value="Food">Food</option>
-                <option value="Art">Art</option>
+                <option value="Live Gig">Live Gig</option>
+                <option value="Studio Session">Studio Session</option>
+                <option value="Jam & Rehearsal">Jam & Rehearsal</option>
+                <option value="Music Workshop">Music Workshop</option>
               </select>
             </div>
             <div class="form-group">
-              <label for="event-date">Event Date *</label>
+              <label for="event-date">Session Date *</label>
               <input type="date" id="event-date" required>
             </div>
             <div class="form-group">
-              <label for="event-location">Venue / Location *</label>
-              <input type="text" id="event-location" required minlength="3" placeholder="e.g., Shanti Devi Mittal Auditorium">
+              <label for="event-location">Studio / Stage Venue *</label>
+              <input type="text" id="event-location" required minlength="3" placeholder="e.g., SoundLab Studio A / Amphitheater">
             </div>
             <div class="form-group">
-              <label for="event-price">Ticket Price (₹) *</label>
+              <label for="event-price">Studio / Slot Fee (₹) *</label>
               <input type="number" id="event-price" required min="0" max="10000" value="0">
             </div>
             <div class="form-group">
-              <label for="event-capacity">Total Seats *</label>
-              <input type="number" id="event-capacity" required min="1" max="500" value="50">
+              <label for="event-capacity">Musician Roster Slots *</label>
+              <input type="number" id="event-capacity" required min="1" max="500" value="10">
             </div>
             <div class="form-group form-group-full">
-              <label for="event-image">Thumbnail Image</label>
+              <label for="event-image">Cover Artwork / Stage Photo</label>
               <div style="display: flex; gap: 0.75rem; align-items: center;">
                 <input type="text" id="event-image" placeholder="Paste image link or click Choose Image..." style="flex: 1;">
                 <input type="file" id="event-image-file" accept="image/*" class="hidden">
-                <button type="button" class="btn-secondary" onclick="document.getElementById('event-image-file').click()" style="white-space: nowrap;">Choose from Device</button>
+                <button type="button" id="btn-choose-file" class="btn-secondary" onclick="document.getElementById('event-image-file').click()" style="white-space: nowrap;">Choose from Device</button>
               </div>
             </div>
             <div class="form-group form-group-full">
-              <label for="event-description">Event Description & Full Details *</label>
-              <textarea id="event-description" rows="3" required minlength="10" placeholder="Enter complete event agenda, guest speakers, and guidelines..."></textarea>
+              <label for="event-description">Setlist, Instruments Needed & Technical Rider *</label>
+              <textarea id="event-description" rows="3" required minlength="10" placeholder="Specify required instruments (drums, bass, keys), BPM/key notes, backline gear provided, and workflow instructions..."></textarea>
             </div>
             <div class="crud-buttons">
-              <button type="submit" id="save-event-btn" class="btn-primary">Save Event</button>
+              <button type="submit" id="save-event-btn" class="btn-primary">Save Record</button>
               <button type="button" id="cancel-edit-btn" class="btn-secondary hidden">Cancel Edit</button>
             </div>
           </form>
         </div>
       </section>
 
-      <!-- DISCOVER, SEARCH & FILTER EVENTS -->
+      <!-- DISCOVER, SEARCH & FILTER GIGS / SESSIONS -->
       <section id="discover-section" class="section-block">
         <div class="section-header">
-          <h2>Discover Local Events</h2>
-          <p class="text-muted">Click on any event card to expand its full description and booking details.</p>
+          <h2>Local Musician Opportunities & Core Directory</h2>
+          <p class="text-muted">Click any session card to view the technical rider, needed instruments, and roster status.</p>
         </div>
 
-        <form id="filter-form" class="filter-bar" aria-label="Search and Filter Events">
-          <input type="search" id="search-input" placeholder="Search events by title, venue, or description...">
-          <select id="category-select" aria-label="Filter by Category">
+        <form id="filter-form" class="filter-bar" aria-label="Search and Filter Music Sessions">
+          <input type="search" id="search-input" placeholder="Search gigs, studios, instruments, or setlist notes...">
+          <select id="category-select" aria-label="Filter by Session Category">
             <option value="All">All Categories</option>
-            <option value="Tech">Tech</option>
-            <option value="Music">Music</option>
-            <option value="Food">Food</option>
-            <option value="Art">Art</option>
+            <option value="Live Gig">Live Gig</option>
+            <option value="Studio Session">Studio Session</option>
+            <option value="Jam & Rehearsal">Jam & Rehearsal</option>
+            <option value="Music Workshop">Music Workshop</option>
           </select>
           <label class="checkbox-label">
-            <input type="checkbox" id="free-only"> Free Entry Only
+            <input type="checkbox" id="free-only"> Free / Open Sessions Only
           </label>
         </form>
 
         <div id="events-grid" class="events-grid"></div>
       </section>
 
-      <!-- BOOKINGS & STATUS TRACKING -->
+      <!-- WORKFLOWS & STATUS REPORTING -->
       <section id="bookings-section" class="section-block">
         <div class="card">
-          <h2 id="bookings-heading">User Tab: My Tickets & Booking Status</h2>
-          <p id="bookings-subtext" class="text-muted">When your request is accepted by the Admin, your status shows "Ticket is Booked".</p>
+          <h2 id="bookings-heading">Musician Tab: My Roster Applications & Workflow Status</h2>
+          <p id="bookings-subtext" class="text-muted">When your application is approved by the Band Leader / Studio Manager, your status updates to "Slot Confirmed".</p>
           <div class="table-wrapper">
             <table>
               <thead>
                 <tr>
-                  <th>Booking ID</th>
-                  <th>Event Title</th>
-                  <th>User</th>
-                  <th>Fee</th>
-                  <th>Ticket Status</th>
+                  <th>Workflow ID</th>
+                  <th>Gig / Session Title</th>
+                  <th>Musician</th>
+                  <th>Session Fee</th>
+                  <th>Workflow Status</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -275,7 +274,7 @@
   </main>
 
   <footer class="site-footer">
-    <p>&copy; 2026 lpu event orginizers. All rights reserved.</p>
+    <p>&copy; 2026 LPU Musicians Hub — Role-Based Platform for Local Musicians. All rights reserved.</p>
   </footer>
 
   <script src="script.js"></script>
