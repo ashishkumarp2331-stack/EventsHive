@@ -1,7 +1,7 @@
 // Core Users & Role-Based Access Records
 const users = [
   { id: 1, name: "Studio Director", email: "admin@lpu.in", password: "1234", role: "Manager", status: "Approved" },
-  { id: 2, name: "Karan aujla (Guitarist)", email: "user@lpu.in", password: "1234", role: "Musician", status: "Approved" }
+  { id: 2, name: "Lead Guitarist", email: "user@lpu.in", password: "1234", role: "Musician", status: "Approved" }
 ];
 
 let currentUser = null;
@@ -59,8 +59,22 @@ let eventsData = [
 
 // Centralized User Interactions & Workflow Status Records
 let bookingsData = [
-  { id: 5001, eventId: 102, attendeeEmail: "user@lpu.in", attendeeName: "Karan aujla (Guitarist)", status: "Booked" },
-  { id: 5002, eventId: 101, attendeeEmail: "user@lpu.in", attendeeName: "Karan aujla (Guitarist)", status: "Pending" }
+  {
+    id: 5001,
+    eventId: 102,
+    attendeeEmail: "user@lpu.in",
+    attendeeName: "Lead Guitarist",
+    aboutMusician: "5 years studio tracking experience, bringing custom pedalboard and rhythm/lead electric guitars.",
+    status: "Booked"
+  },
+  {
+    id: 5002,
+    eventId: 101,
+    attendeeEmail: "user@lpu.in",
+    attendeeName: "Lead Guitarist",
+    aboutMusician: "Fingerstyle acoustic guitarist and backing vocalist with live showcase experience.",
+    status: "Pending"
+  }
 ];
 
 function showNotification(message) {
@@ -178,7 +192,7 @@ function setSession(user) {
     : "Musician Workflow Tab: My Lineup Applications & Slot Status";
 
   document.getElementById("bookings-subtext").textContent = isManager
-    ? "Approve or reject incoming musician slot requests to update live lineup statuses."
+    ? "Review what each musician wrote about themselves and approve or reject incoming slot requests."
     : "Track your submitted gig and studio slot requests in real time.";
 
   showNotification(`Signed in as ${user.name} (${roleLabel}).`);
@@ -387,11 +401,21 @@ function requestBooking(eventId) {
     return;
   }
 
+  const aboutInput = document.getElementById(`about-musician-${eventId}`);
+  const aboutMusician = aboutInput ? aboutInput.value.trim() : "";
+
+  if (!aboutMusician) {
+    showNotification("Please tell us briefly about yourself (instrument, experience, or gear) before applying.");
+    if (aboutInput) aboutInput.focus();
+    return;
+  }
+
   const newBooking = {
     id: Math.floor(1000 + Math.random() * 9000),
     eventId: ev.id,
     attendeeEmail: currentUser.email,
     attendeeName: currentUser.name,
+    aboutMusician: aboutMusician,
     status: "Pending"
   };
 
@@ -464,7 +488,12 @@ function renderEvents() {
       } else if (userBooking && userBooking.status === "Pending") {
         actionButtons = `<span class="badge status-Pending">Pending Review</span>`;
       } else {
-        actionButtons = `<button class="btn-primary" onclick="event.stopPropagation(); requestBooking(${ev.id})">Apply for Slot</button>`;
+        actionButtons = `
+          <div style="width: 100%; display: flex; flex-direction: column; gap: 0.5rem;" onclick="event.stopPropagation();">
+            <input type="text" id="about-musician-${ev.id}" placeholder="Tell about yourself (instrument, experience, gear)..." required>
+            <button class="btn-primary" onclick="event.stopPropagation(); requestBooking(${ev.id})">Apply for Slot</button>
+          </div>
+        `;
       }
     }
 
@@ -512,7 +541,7 @@ function renderBookingsTable() {
     : bookingsData;
 
   if (visibleBookings.length === 0) {
-    tbody.innerHTML = "<tr><td colspan='6'>No musician workflow records found.</td></tr>";
+    tbody.innerHTML = "<tr><td colspan='7'>No musician workflow records found.</td></tr>";
     return;
   }
 
@@ -544,6 +573,7 @@ function renderBookingsTable() {
       <td>#${b.id}</td>
       <td>${ev.title}</td>
       <td>${b.attendeeName}</td>
+      <td>${b.aboutMusician || "—"}</td>
       <td>${ev.price === 0 ? "FREE" : "₹" + ev.price}</td>
       <td>${statusBadge}</td>
       <td>${actions}</td>
@@ -574,7 +604,7 @@ function renderDashboardAndReports() {
     const catEvents = eventsData.filter(e => e.category === cat);
     const catCapacity = catEvents.reduce((sum, e) => sum + e.capacity, 0);
     const catBooked = bookedList.filter(b => {
-      const ev = eventsData.find(e => e.id === b.eventId);
+      const ev = eventsData.find(e => e.id === e.eventId || e.id === b.eventId);
       return ev && ev.category === cat;
     });
     const catRevenue = catBooked.reduce((sum, b) => {
